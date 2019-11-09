@@ -1,0 +1,9 @@
+# Name the node and cluster, make it easy to recognise in the logs.
+# Doesn't really matter with a single node configuration. 
+cluster.name: "es-cluster-dev"
+node.name: es-node-01
+
+# Special setting to only use one node and disable good practice checks.
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+# Configuring cluster is hugely dependant on scenario, best to leave that until realistic test loads are available.
+discovery.type: single-node

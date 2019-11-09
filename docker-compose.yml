@@ -1,0 +1,34 @@
+# Elasticsearch, Logstash, Kibana and APM for testing out a logger.
+# Verbosely configured to make it easy to reproduce in a non-docker environment.   
+
+# Using and exposing default ports so that they match documentation and can be individually debugged.
+
+version: '3.7'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    # Docker lets container resolve one another on the network by their container name.
+    container_name: es01
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    # Allow Elasticsearch to reserve memory without swapping, seems to be important for its performance.
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      # Map the config as fast read only (ro) mode.
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      # Map the data folder as fast delegated mode, caches writes to host, container's view is authoritative.
+      - ./data/elasticsearch:/usr/share/elasticsearch/data:delegated
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+volumes:
+  es-data01:
+    driver: local
+networks:
+  # The docker network that will be shared between all the services.
+  elastic:
+    driver: bridge

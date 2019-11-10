@@ -29,6 +29,7 @@ cpFile() {
 }
 
 cpFile "docker.elastic.co/elasticsearch/elasticsearch:$version" "usr/share/elasticsearch/config/elasticsearch.yml" ./config/elasticsearch-default.yml
+cpFile "docker.elastic.co/elasticsearch/elasticsearch:$version" "usr/share/elasticsearch/config/jvm.options" ./config/elasticsearch-jvm-default.options
 cpFile "docker.elastic.co/kibana/kibana:$version" "usr/share/kibana/config/kibana.yml" ./config/kibana-default.yml
 cpFile "docker.elastic.co/logstash/logstash:$version" "usr/share/logstash/config/logstash.yml" ./config/logstash-default.yml
 cpFile "docker.elastic.co/apm/apm-server:$version" "usr/share/apm-server/apm-server.yml" ./config/apm-server-default.yml

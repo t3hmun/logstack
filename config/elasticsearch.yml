@@ -1,9 +1,24 @@
 # Name the node and cluster, make it easy to recognise in the logs.
 # Doesn't really matter with a single node configuration. 
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster.name.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/node.name.html
 cluster.name: "es-cluster-dev"
 node.name: es-node-01
 
+# Bind this server to be externally accessible 0.0.0.0 is the external access bind address.
+# Don't be silly like me and confuse localhost in the container and localhost on the host machine.
+# Without this setting Elasticsearch binds to localhost (127.0.0.1) - only accessible within the container.
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/network.host.html
+network.host: 0.0.0.0
+
 # Special setting to only use one node and disable good practice checks.
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/discovery-settings.html
 # Configuring cluster is hugely dependant on scenario, best to leave that until realistic test loads are available.
 discovery.type: single-node
+
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/path-settings.html
+# These must be set to a data volume when on a real server.
+path:
+  logs: /var/log/elasticsearch
+  data: /var/data/elasticsearch

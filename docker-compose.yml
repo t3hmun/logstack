@@ -10,24 +10,29 @@ services:
     # Docker lets container resolve one another on the network by their container name.
     container_name: es01
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      # This sets the config path, this is the default, but you might want to change it to a place outside of the installation for prod.
+      - ES_PATH_CONF=/usr/share/elasticsearch/config
     # Allow Elasticsearch to reserve memory without swapping, seems to be important for its performance.
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      # Map the config as fast read only (ro) mode.
+      # Map the configs with fast read only (ro) mode.
       - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./config/elasticsearch-jvm.options:/usr/share/elasticsearch/config/jvm.options:ro
       # Map the data folder as fast delegated mode, caches writes to host, container's view is authoritative.
-      - ./data/elasticsearch:/usr/share/elasticsearch/data:delegated
+      # Data is not only the data but also the default heap dump path for out of memory exceptions
+      - ./data/elasticsearch:/var/data/elasticsearch:delegated
+      - ./logs/elasticsearch/elasticsearch:/var/log/elasticsearch:delegated
+      # This is the default folder for memory dumps when 
+      - ./dump/elasticsearch:/var/lib/elasticsearch:consistent
+    
     ports:
       - 9200:9200
     networks:
       - elastic
-volumes:
-  es-data01:
-    driver: local
+
 networks:
   # The docker network that will be shared between all the services.
   elastic:

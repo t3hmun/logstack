@@ -3,6 +3,8 @@
         "Serilog",
         "elasticsearch",
         "kibana",
-        "logstash"
+        "logstash",
+        "memlock",
+        "ulimits"
     ]
 }
